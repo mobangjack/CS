@@ -16,7 +16,7 @@
 
 namespace CS.Util.List
 {
-	public class ArrayList<T>
+	public class ArrayList<T> : List<T>
 	{
 		protected T[] arr;
 		protected int len;
@@ -111,11 +111,6 @@ namespace CS.Util.List
 			return true;
 		}
 
-		public void Clear()
-		{
-			len = 0;
-		}
-
 		public T[] ToArray()
 		{
 			T[] _arr = new T[len];
@@ -123,6 +118,5 @@ namespace CS.Util.List
 				_arr[i] = arr[i];
 			return _arr;
 		}
-			
 	}
 }

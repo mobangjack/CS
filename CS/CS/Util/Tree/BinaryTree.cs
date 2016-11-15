@@ -14,32 +14,31 @@
  * limitations under the License.
  */
 
-using CS.Util.Link;
-using CS.Util.Iter;
 using CS.Util.Queue;
 
 namespace CS.Util.Tree
 {
-	public class BinaryTree<T> : Link<T>
+	public class BinaryTree<T>
 	{
-		protected BinaryTree<T> parent, left, right;
+		private T data;
+		private BinaryTree<T> parent, left, right;
 
-		public BinaryTree(T data, BinaryTree<T> parent, BinaryTree<T> left, BinaryTree<T> right)
+		public BinaryTree()
 		{
-			this.data = data;
-			this.parent = parent;
-			this.left = left;
-			this.right = right;
-		}
-
-		public BinaryTree(T data, BinaryTree<T> left, BinaryTree<T> right)
-		{
-			this (data, null, left, right);
+			data = default(T);
+			left = right = null;
 		}
 
 		public BinaryTree(T data)
 		{
-			Node (data, null, null);
+			this.data = data;
+			left = right = null;
+		}
+
+		public T Data
+		{
+			get { return data; }
+			set { data = value; }
 		}
 
 		public BinaryTree<T> Parent
@@ -60,61 +59,61 @@ namespace CS.Util.Tree
 			set { right = value; }
 		}
 
-		public void IterPreOrder(Iter<BinaryTree<T>> iter)
+		public void ShowByLevel()
 		{
-			iter.Iter(this);
-			if(left != null)
-			{
-				left.IterPreOrder(iter);
-			}
-			iter.Iter(left);
-			if(right != null)
-			{
-				right.IterPreOrder(iter);
-			}
-			iter.Iter(right);
-		}
-
-		public void IterMidOrder(iter<BinaryTree<T>> iter)
-		{
-			iter.Iter(left);
-			if(left != null)
-			{
-				left.IterMidOrder(iter);
-			}
-			iter.Iter(this);
-			if(right != null)
-			{
-				right.IterMidOrder(iter);
-			}
-			iter.Iter(right);
-		}
-
-		public void IterPostOrder(iter<BinaryTree<T>> iter)
-		{
-			iter.Iter(left);
-			if(left != null)
-			{
-				left.IterPostOrder(iter);
-			}
-			iter.Iter(right);
-			if(right != null)
-			{
-				right.IterPostOrder(iter);
-			}
-			iter.Iter(this);
-		}
-
-		public void IterLevel(iter<BinaryTree<T>> iter)
-		{
-			Queue<T> queue = new Queue<T> (10);
+			Queue<BinaryTree<T>> queue = new Queue<BinaryTree<T>> (10);
 			queue.Enqueue (this);
 			while (queue.NotEmpty ()) {
-				BinaryTree<T> node = queue.Dequeue ();
-				iter.Iter (node);
-				queue.Enqueue (node.left);
-				queue.Enquue (node.right);
+				BinaryTree<T> btree = queue.Dequeue ();
+				System.Console.Write (btree.Data);
+				queue.Enqueue (btree.Left);
+				queue.Enqueue (btree.Right);
 			}
+		}
+
+		public void ShowPreOrder()
+		{
+			System.Console.Write (data);
+			if(left != null)
+			{
+				left.ShowPreOrder ();
+			}
+			System.Console.Write (left.Data);
+			if(right != null)
+			{
+				right.ShowPreOrder();
+			}
+			System.Console.Write (right.Data);
+		}
+
+		public void ShowMidOrder()
+		{
+			System.Console.Write (left.Data);
+			if(left != null)
+			{
+				left.ShowMidOrder();
+			}
+			System.Console.Write (data);
+			if(right != null)
+			{
+				right.ShowMidOrder();
+			}
+			System.Console.Write (right.Data);
+		}
+
+		public void ShowPostOrder()
+		{
+			System.Console.Write (left.Data);
+			if(left != null)
+			{
+				left.ShowPostOrder();
+			}
+			System.Console.Write (right.Data);
+			if(right != null)
+			{
+				right.ShowPostOrder();
+			}
+			System.Console.Write (data);
 		}
 	}
 }

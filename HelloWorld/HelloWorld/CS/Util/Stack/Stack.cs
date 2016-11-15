@@ -67,7 +67,7 @@ namespace CS.Util.Stack
 
 		public T Pop()
 		{
-			return arr [--len];
+			return arr [len--];
 		}
 	}
 }

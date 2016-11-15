@@ -30,7 +30,9 @@ namespace CS.Util.Link
 
 		public Link(T data)
 		{
-			Link(data, null, null);
+			this.data = data;
+			this.left = null;
+			this.right = null;
 		}
 
 		public T Data 

@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-namespace CS.Util.Stack
+namespace CS.Util.Queue
 {
-	public class Stack<T>
+	public class Queue<T>
 	{
 		protected T[] arr;
-		protected int len;
+		protected int r, w, len;
 
-		public Stack(int initialCapacity)
+		public Queue(int initialCapacity)
 		{
 			this.arr = new T[initialCapacity];
+			this.r = this.w = 0;
 			this.len = 0;
 		}
 
@@ -32,9 +33,11 @@ namespace CS.Util.Stack
 			get { return arr.Length; }
 			set {
 				T[] _arr = new T[value];
-				for (int i = 0; i < arr.Length; i++)
-					_arr [i] = arr [i];
+				for (int i = r; i != w; i = (i + 1) % arr.Length)
+					_arr [i > r ? i - r : i - r + arr.Length] = arr [i];
 				arr = _arr;
+				w -= r;
+				r = 0;
 			}
 		}
 
@@ -58,16 +61,21 @@ namespace CS.Util.Stack
 			return len > arr.Length - 1;
 		}
 
-		public void Push(T item)
+		public void Enqueue(T item)
 		{
 			if (IsFull())
 				Capacity *= 2;
-			arr [len++] = item;
+			arr [w] = item;
+			w = (w + 1) % arr.Length;
+			len++;
 		}
 
-		public T Pop()
+		public T Dequeue()
 		{
-			return arr [--len];
+			T ret = arr [r];
+			r = (r + 1) % arr.Length;
+			len--;
+			return ret;
 		}
 	}
 }

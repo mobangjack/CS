@@ -1,0 +1,5 @@
+/home/bj/CS/CS/CS/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/bj/CS/CS/CS/bin/Debug/CS.exe.mdb
+/home/bj/CS/CS/CS/bin/Debug/CS.exe
+/home/bj/CS/CS/CS/obj/x86/Debug/CS.exe
+/home/bj/CS/CS/CS/obj/x86/Debug/CS.exe.mdb

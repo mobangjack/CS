@@ -14,47 +14,13 @@
  * limitations under the License.
  */
 
+using CS.Util.Link;
+
 namespace CS.Util.List
 {
-	public class LinkedList<T>
+	public class LinkedList<T> : List<T>
 	{
-		public class Node
-		{
-			private T data;
-			private Node left, right;
-
-			public Node()
-			{
-				data = default(T);
-				left = right = default(Node);
-			}
-
-			public Node(T data)
-			{
-				this.data = data;
-				left = right = null;
-			}
-
-			public T Data
-			{
-				get { return data; }
-				set { data = value; }
-			}
-
-			public Node Left
-			{
-				get { return left; }
-				set { left = value; }
-			}
-
-			public Node Right
-			{
-				get { return right; }
-				set { right = value; }
-			}
-		}
-
-		protected Node first, last;
+		protected Link<T> first, last;
 		protected int len;
 
 		public LinkedList()
@@ -65,14 +31,14 @@ namespace CS.Util.List
 
 		public int IndexOf(T item)
 		{
-			Node node = first;
+			Link<T> link = first;
 			for (int i = 0; i < len; i++) {
-				if (node == null)
+				if (link == null)
 					break;
-				if (item == null ? node.Data == null : item.Equals(node.Data))
+				if (item == null ? link.data == null : item.Equals(link.data))
 					return i;
-				node = node.Right;
-				if (node == first)
+				link = link.Right;
+				if (link == first)
 					break;
 			}
 			return -1;
@@ -98,55 +64,57 @@ namespace CS.Util.List
 			return len > 0;
 		}
 
-		protected Node Search(int index)
+		protected Link<T> Search(int index)
 		{
 			if (index < 0 || index > len - 1)
 				throw new System.IndexOutOfRangeException();
-            Node node = first;
+            Link<T> link = first;
 			for (int i = 0; i < len; i++)
-				if (node == null)
+				if (link == null)
 					break;
-				else if (i == index)
-					return node;
+				if (i == index)
+					return link;
 				else
-					node = node.Right;
+					link = link.next;
 			return null;
 		}
 
-		protected Node Search(T item)
+		protected Link<T> Search(T item)
 		{
-			Node node = first;
+			Link<T> link = first;
 			for (int i = 0; i < len; i++) {
-				if (node == null)
+				if (link == null)
 					break;
-				else if(item == null ? node.Data == null : item.Equals(node.Data))
-					return node;
+				else if(item == null ? link.data == null : item.Equals(link.data))
+					return link;
 				else
-					node = node.Right;
+					link = link.next;
 			}
 			return null;
 		}
 
 		public T Get(int index)
 		{
-			Node node = Search (index);
-			return node == null ? default(T) : node.Data;
+			Link<T> link = Search (index);
+			return link == null ? null : link.Data;
 		}
 
 		public void Set(int index, T value)
 		{
 			if(index < 0 || index > len - 1)
 				throw new System.IndexOutOfRangeException();
-			Node node = Search (index);
-			node.Data = value;
+			Link<T> link = Search (index);
+			T replaced = link.Data;
+			link.Data = value;
+			return replaced;
 		}
 
 		public void Add(int index, T item)
 		{
 			if (index < 0 || index > len)
 				throw new System.IndexOutOfRangeException();
-			Node added = new Node (item);
-			Node node = Search (index);
+			Link<T> added = new Link<T> (item);
+			Link<T> link = Search (index);
 			if (index == 0) {
 				added.Right = first;
 				first.Left = added;
@@ -156,56 +124,62 @@ namespace CS.Util.List
 				last.Right = added;
 				last = added;
 			} else {
-				added.Left = node.Left;
-				added.Right = node;
-				node.Left.Right = added;
-				node.Right.Left = added;
+				added.Left = link.Left;
+				added.Right = link;
+				link.Left.Right = added;
+				link.Right.Left = added;
 			}
 			len++;
 		}
 
 		public void Add(T item)
         {
-			Add (len, item);
+			Link<T> link = new Link<T> (item);
+			last.Right = link;
+			link.Left = last;
+			last = added;
+			len++;
+			if (first == null)
+				first = link;
         }
 
-		protected void Remove(Node node)
+		protected void Remove(Link<T> link)
 		{
-			if(node.Equals(first)) {
+			if(link.Equals(first)) {
 				first = first.Right;
 				first.Left = null;
-			} else if (node.Equals(last)) {
+			} else if (link.Equals(last)) {
 				last = last.Left;
 				last.Right = null;
 			} else {
-				node.Left.Right = node.Right;
-				node.Right.Left = node.Left;
+				link.Left.Right = link.Right;
+				link.Right.Left = link.Left;
 			}
 			len--;
 		}
 
 		public bool Remove(T item)
 		{
-			Node node = Search (item);
-			if (node == null)
+			Link<T> link = Search (item);
+			if (link == null)
 				return false;
-			Remove (node);
+			Remove (link);
 			return true;
 		}
 
 		public T Remove(int index)
 		{
-			Node node = Search (index);
-			Remove (node);
-			return node.Data;
+			Link<T> link = Search (index);
+			Remove (link);
+			return link.Data;
 		}
 
 		public T[] ToArray()
 		{
-			Node node = first;
+			Link<T> link = first;
 			T[] _arr = new T[len];
-			for (int i = 0; i < len; node = node.Right, i++)
-				_arr [i] = node.Data;
+			for (int i = 0; i < len; link = link.Right, i++)
+				_arr [i] = link.Data;
 			return _arr;
 		}
 	}
