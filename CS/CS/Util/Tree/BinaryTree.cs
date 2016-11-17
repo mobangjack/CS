@@ -23,16 +23,16 @@ namespace CS.Util.Tree
 		private T data;
 		private BinaryTree<T> parent, left, right;
 
-		public BinaryTree()
+		private BinaryTree()
 		{
 			data = default(T);
-			left = right = null;
+			parent = left = right = null;
 		}
 
 		public BinaryTree(T data)
 		{
 			this.data = data;
-			left = right = null;
+			parent = left = right = null;
 		}
 
 		public T Data
@@ -59,61 +59,102 @@ namespace CS.Util.Tree
 			set { right = value; }
 		}
 
+		public void ShowPreOrder()
+		{
+			System.Console.Write (data);
+			if(left != null)
+				left.ShowPreOrder ();
+			if(right != null)
+				right.ShowPreOrder();
+		}
+
+		public void ShowMidOrder()
+		{
+			if(left != null)
+				left.ShowMidOrder();
+			System.Console.Write (data);
+			if(right != null)
+				right.ShowMidOrder();
+		}
+
+		public void ShowPostOrder()
+		{
+			if(left != null)
+				left.ShowPostOrder();
+			if(right != null)
+				right.ShowPostOrder();
+			System.Console.Write (data);
+		}
+
 		public void ShowByLevel()
 		{
 			Queue<BinaryTree<T>> queue = new Queue<BinaryTree<T>> (10);
 			queue.Enqueue (this);
 			while (queue.NotEmpty ()) {
 				BinaryTree<T> btree = queue.Dequeue ();
+				if (btree == null)
+					continue;
 				System.Console.Write (btree.Data);
 				queue.Enqueue (btree.Left);
 				queue.Enqueue (btree.Right);
 			}
 		}
 
-		public void ShowPreOrder()
+		public int Level()
 		{
-			System.Console.Write (data);
-			if(left != null)
-			{
-				left.ShowPreOrder ();
-			}
-			System.Console.Write (left.Data);
-			if(right != null)
-			{
-				right.ShowPreOrder();
-			}
-			System.Console.Write (right.Data);
+			if (parent == null)
+				return 0;
+			else
+				return 1 + parent.Level ();
 		}
 
-		public void ShowMidOrder()
+		public int Depth()
 		{
-			System.Console.Write (left.Data);
-			if(left != null)
-			{
-				left.ShowMidOrder();
-			}
-			System.Console.Write (data);
-			if(right != null)
-			{
-				right.ShowMidOrder();
-			}
-			System.Console.Write (right.Data);
+			if (left == null && right == null)
+				return 0;
+			else if (left != null && right != null)
+				return 1 + System.Math.Max(left.Depth(), right.Depth());
+			else if (left != null)
+				return 1 + left.Depth ();
+			else
+				return 1 + right.Depth ();
 		}
 
-		public void ShowPostOrder()
+		public int Size()
 		{
-			System.Console.Write (left.Data);
-			if(left != null)
-			{
-				left.ShowPostOrder();
-			}
-			System.Console.Write (right.Data);
-			if(right != null)
-			{
-				right.ShowPostOrder();
-			}
-			System.Console.Write (data);
+			if (left == null && right == null)
+				return 1;
+			else if (left != null && right != null)
+				return 1 + left.Size() + right.Size();
+			else if (left != null)
+				return 1 + left.Size ();
+			else
+				return 1 + right.Size ();
+		}
+
+		public bool IsFull()
+		{
+			if (left == null && right == null)
+				return true;
+			else if (left != null && right != null)
+				return left.IsFull () && right.IsFull ();
+			else
+				return false;
+		}
+
+		public override string ToString()
+		{
+			string s = data == null ? null : data.ToString();
+			for (int i = 0; i < Level (); i++)
+				s = "   " + s;
+			if (left == null && right == null)
+				return s;
+			else if (left != null && right != null)
+				return s + "\n" + left.ToString() + "\n" + right.ToString();
+			else if (left != null)
+				return s + "\n" + left.ToString ();
+			else
+				return s + "\n" + right.ToString ();
 		}
 	}
 }

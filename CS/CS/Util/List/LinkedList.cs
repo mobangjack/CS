@@ -54,8 +54,8 @@ namespace CS.Util.List
 			}
 		}
 
-		protected Node first, last;
-		protected int len;
+		private Node first, last;
+		private int len;
 
 		public LinkedList()
 		{
@@ -66,15 +66,9 @@ namespace CS.Util.List
 		public int IndexOf(T item)
 		{
 			Node node = first;
-			for (int i = 0; i < len; i++) {
-				if (node == null)
-					break;
+			for (int i = 0; i < len && node != null; i++, node = node.Right)
 				if (item == null ? node.Data == null : item.Equals(node.Data))
 					return i;
-				node = node.Right;
-				if (node == first)
-					break;
-			}
 			return -1;
 		}
 
@@ -98,68 +92,72 @@ namespace CS.Util.List
 			return len > 0;
 		}
 
-		protected Node Search(int index)
+		private Node NodeAt(int index)
 		{
-			if (index < 0 || index > len - 1)
-				throw new System.IndexOutOfRangeException();
             Node node = first;
-			for (int i = 0; i < len; i++)
-				if (node == null)
-					break;
-				else if (i == index)
+			for (int i = 0; i < len && node != null; i++, node = node.Right)
+				if (i == index)
 					return node;
-				else
-					node = node.Right;
 			return null;
 		}
 
-		protected Node Search(T item)
+		private Node NodeOf(T item)
 		{
 			Node node = first;
-			for (int i = 0; i < len; i++) {
-				if (node == null)
-					break;
-				else if(item == null ? node.Data == null : item.Equals(node.Data))
+			for (int i = 0; i < len && node != null; i++, node = node.Right)
+				if(item == null ? node.Data == null : item.Equals(node.Data))
 					return node;
-				else
-					node = node.Right;
-			}
 			return null;
+		}
+
+		private void IndexRangeCheck(int index, int max)
+		{
+			if (index < 0 || index > max)
+				throw new System.IndexOutOfRangeException();
 		}
 
 		public T Get(int index)
 		{
-			Node node = Search (index);
+			IndexRangeCheck (index, len - 1);
+			Node node = NodeAt (index);
 			return node == null ? default(T) : node.Data;
 		}
 
-		public void Set(int index, T value)
+		public T Set(int index, T value)
 		{
-			if(index < 0 || index > len - 1)
-				throw new System.IndexOutOfRangeException();
-			Node node = Search (index);
+			IndexRangeCheck (index, len - 1);
+			Node node = NodeAt (index);
+			T replaced = node.Data;
 			node.Data = value;
+			return replaced;
+		}
+
+		public T this[int index]
+		{
+			get { return Get(index); }
+			set { Set (index, value); }
 		}
 
 		public void Add(int index, T item)
 		{
-			if (index < 0 || index > len)
-				throw new System.IndexOutOfRangeException();
+			IndexRangeCheck (index, len);
 			Node added = new Node (item);
-			Node node = Search (index);
+			if (first == null)
+				first = last = added;
 			if (index == 0) {
-				added.Right = first;
 				first.Left = added;
+				added.Right = first;
 				first = added;
 			} else if (index == len) {
-				added.Left = last;
 				last.Right = added;
+				added.Left = last;
 				last = added;
 			} else {
+				Node node = NodeAt (index);
+				node.Left.Right = added;
 				added.Left = node.Left;
 				added.Right = node;
-				node.Left.Right = added;
-				node.Right.Left = added;
+				node.Left = added;
 			}
 			len++;
 		}
@@ -169,7 +167,7 @@ namespace CS.Util.List
 			Add (len, item);
         }
 
-		protected void Remove(Node node)
+		private void RemoveNode(Node node)
 		{
 			if(node.Equals(first)) {
 				first = first.Right;
@@ -186,22 +184,25 @@ namespace CS.Util.List
 
 		public bool Remove(T item)
 		{
-			Node node = Search (item);
+			Node node = NodeOf (item);
 			if (node == null)
 				return false;
-			Remove (node);
+			RemoveNode (node);
 			return true;
 		}
 
 		public T Remove(int index)
 		{
-			Node node = Search (index);
-			Remove (node);
+			IndexRangeCheck (index, len - 1);
+			Node node = NodeAt (index);
+			RemoveNode (node);
 			return node.Data;
 		}
 
 		public T[] ToArray()
 		{
+			if (first == null)
+				return null;
 			Node node = first;
 			T[] _arr = new T[len];
 			for (int i = 0; i < len; node = node.Right, i++)

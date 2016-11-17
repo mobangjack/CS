@@ -66,21 +66,38 @@ namespace CS.Util.List
 			}
 		}
 
+		private void IndexRangeCheck(int index, int max)
+		{
+			if (index < 0 || index > max)
+				throw new System.IndexOutOfRangeException();
+		}
+
 		public T Get(int index)
 		{
+			IndexRangeCheck (index, len-1);
 			return arr[index];
 		}
 
-		public void Set(int index, T value)
+		public T Set(int index, T value)
 		{
+			IndexRangeCheck (index, len-1);
 			if (len > arr.Length - 1)
 				Capacity *= 2;
+			T replaced = arr[index];
 			arr[index] = value;
 			len++;
+			return replaced;
+		}
+
+		public T this[int index]
+		{
+			get { return Get(index); }
+			set { Set (index, value); }
 		}
 
 		public void Add(int index, T item)
 		{
+			IndexRangeCheck (index, len);
 			if (len > arr.Length - 1)
 				Capacity *= 2;
 			for (int i = len; i > index; i--)
@@ -91,11 +108,12 @@ namespace CS.Util.List
 
 		public void Add(T item)
         {
-			arr [len++] = item;
+			Add (len, item);
         }
 
 		public T Remove(int index)
 		{
+			IndexRangeCheck (index, len-1);
 			T removed = Get(index);
 			for(int i = index; i < len - 1; i++)
 				arr[i] = arr[i+1];

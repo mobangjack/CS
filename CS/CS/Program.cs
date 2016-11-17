@@ -20,6 +20,8 @@ using CS.Util.List;
 using CS.Util.Stack;
 using CS.Util.Queue;
 using CS.Util.Tree;
+using CS.Util.Matrix;
+using CS.Util.Graph;
 
 namespace CS
 {
@@ -27,6 +29,10 @@ namespace CS
 	{
 		public static void TestArrayList()
 		{
+			System.Console.WriteLine ();
+			System.Console.WriteLine ("***********************TestArrayList***********************");
+			System.Console.WriteLine ();
+
 			ArrayList<string> list = new ArrayList<string> (10);
 			list.Add ("1.Linear: One to One");
 			list.Add ("2.Tree: One to Many");
@@ -38,10 +44,14 @@ namespace CS
 
 		public static void TestLinkedList()
 		{
+			System.Console.WriteLine ();
+			System.Console.WriteLine ("***********************TestLinkedList***********************");
+			System.Console.WriteLine ();
+
 			LinkedList<string> list = new LinkedList<string> ();
 			list.Add ("1.Linear: One to One");
-			//list.Add ("2.Tree: One to Many");
-			//list.Add ("3.Map: Many to Many");
+			list.Add ("2.Tree: One to Many");
+			list.Add ("3.Map: Many to Many");
 			for (int i = 0; i < list.Size (); i++) {
 				System.Console.WriteLine (list.Get (i));
 			}
@@ -49,6 +59,10 @@ namespace CS
 
 		public static void TestStack()
 		{
+			System.Console.WriteLine ();
+			System.Console.WriteLine ("***********************TestStack***********************");
+			System.Console.WriteLine ();
+
 			Stack<string> stack = new Stack<string> (10);
 			stack.Push ("1.Linear: One to One");
 			stack.Push ("2.Tree: One to Many");
@@ -60,6 +74,10 @@ namespace CS
 
 		public static void TestQueue()
 		{
+			System.Console.WriteLine ();
+			System.Console.WriteLine ("***********************TestQueue***********************");
+			System.Console.WriteLine ();
+
 			Queue<string> queue = new Queue<string> (10);
 			queue.Enqueue ("1.Linear: One to One");
 			queue.Enqueue ("2.Tree: One to Many");
@@ -71,57 +89,124 @@ namespace CS
 
 		public static void TestBinaryTree()
 		{
-			BinaryTree<string> L00 = new BinaryTree<string> ("L0-0");
-			BinaryTree<string> L11 = new BinaryTree<string> ("L1-1");
-			BinaryTree<string> L12 = new BinaryTree<string> ("L1-2");
+			System.Console.WriteLine ();
+			System.Console.WriteLine ("***********************TestBinaryTree***********************");
+			System.Console.WriteLine ();
 
-			L00.Left = L11;
-			L00.Right = L12;
+			/*******************************************/
+			/*                   A                     */
+			/*                 /  \                    */
+			/*               B     C                   */
+			/*              / \   / \                  */
+			/*             D  E  F  G                  */
+			/*******************************************/
 
-			L11.Parent = L00;
-			L12.Parent = L00;
+			BinaryTree<string> A = new BinaryTree<string> ("A");
+			BinaryTree<string> B = new BinaryTree<string> ("B");
+			BinaryTree<string> C = new BinaryTree<string> ("C");
+			BinaryTree<string> D = new BinaryTree<string> ("D");
+			BinaryTree<string> E = new BinaryTree<string> ("E");
+			BinaryTree<string> F = new BinaryTree<string> ("F");
+			BinaryTree<string> G = new BinaryTree<string> ("G");
 
-			BinaryTree<string> L23 = new BinaryTree<string> ("L2-3");
-			BinaryTree<string> L24 = new BinaryTree<string> ("L2-4");
-			BinaryTree<string> L25 = new BinaryTree<string> ("L2-5");
-			BinaryTree<string> L26 = new BinaryTree<string> ("L2-6");
+			A.Left = B;
+			A.Right = C;
+			B.Parent = C.Parent = A;
 
-			L11.Left = L23;
-			L11.Right = L24;
+			B.Left = D;
+			B.Right = E;
+			D.Parent = E.Parent = B;
 
-			L23.Parent = L11;
-			L24.Parent = L11;
+			C.Left = F;
+			C.Right = G;
+			F.Parent = G.Parent = C;
 
-			L12.Left = L25;
-			L12.Right = L26;
+			System.Console.WriteLine ("Level of G");
+			System.Console.WriteLine (G.Level ());
+			System.Console.WriteLine ();
 
-			L25.Parent = L12;
-			L26.Parent = L12;
+			System.Console.WriteLine ("Depth");
+			System.Console.WriteLine (A.Depth ());
+			System.Console.WriteLine ();
+
+			System.Console.WriteLine ("Size");
+			System.Console.WriteLine (A.Size ());
+			System.Console.WriteLine ();
+
+			System.Console.WriteLine ("IsFull");
+			System.Console.WriteLine (A.IsFull ());
+			System.Console.WriteLine ();
+
+			System.Console.WriteLine ("ToString");
+			System.Console.WriteLine (A.ToString ());
+			System.Console.WriteLine ();
 
 			System.Console.WriteLine ("PreOrder Traversal");
-			L00.ShowPreOrder ();
+			A.ShowPreOrder ();
 			System.Console.WriteLine ();
 
 			System.Console.WriteLine ("MidOrder Traversal");
-			L00.ShowMidOrder ();
+			A.ShowMidOrder ();
 			System.Console.WriteLine ();
 
 			System.Console.WriteLine ("PostOrder Traversal");
-			L00.ShowPostOrder ();
+			A.ShowPostOrder ();
 			System.Console.WriteLine ();
 
 			System.Console.WriteLine ("Level Traversal");
-			L00.ShowByLevel ();
+			A.ShowByLevel ();
 			System.Console.WriteLine ();
+		}
+
+		public static void TestSparseMatrix()
+		{
+			System.Console.WriteLine ();
+			System.Console.WriteLine ("***********************TestSparseMatrix***********************");
+			System.Console.WriteLine ();
+
+			SparseMatrix matrix = new SparseMatrix ();
+			for (int i = 0; i < 5; i++)
+				matrix.Set (i, i, i + 1);
+			
+			System.Console.WriteLine ("SparseMatrix");
+			System.Console.WriteLine (matrix.ToString());
+			System.Console.WriteLine ();
+			
+		}
+
+		public static void TestAdjacencyMatrixGraph()
+		{
+			System.Console.WriteLine ();
+			System.Console.WriteLine ("***********************TestAdjacencyMatrixGraph***********************");
+			System.Console.WriteLine ();
+
+			ArrayList<Vertex<string>> vertexs = new ArrayList<Vertex<string>> (4);
+			for (int i = 0; i < 4; i++) {
+				Vertex<string> vertex = new Vertex<string> ("" + (char)('A' + i));
+				vertexs.Add (vertex);
+			}
+
+			int[,] adjMat = new int[,] {
+				{1, 1, 0, 0},
+				{0, 1, 1, 0},
+				{0, 0, 1, 1},
+				{1, 0, 0, 1},
+			};
+
+			AdjacencyMatrixGraph<string> adjMatGraph = new AdjacencyMatrixGraph<string> (vertexs, adjMat);
+			System.Console.WriteLine (adjMatGraph);
+
 		}
 
 		public static void Main (string[] args)
 		{
-			//TestArrayList ();
-			//TestLinkedList ();
-			//TestStack ();
-			//TestQueue ();
+			TestArrayList ();
+			TestLinkedList ();
+			TestStack ();
+			TestQueue ();
 			TestBinaryTree ();
+			TestSparseMatrix();
+			TestAdjacencyMatrixGraph ();
 		}
 
 	}
