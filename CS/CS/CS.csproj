@@ -41,8 +41,8 @@
     <Compile Include="Util\Stack\Stack.cs" />
     <Compile Include="Util\Tree\BinaryTree.cs" />
     <Compile Include="Util\Matrix\SparseMatrix.cs" />
-    <Compile Include="Util\Graph\Vertex.cs" />
     <Compile Include="Util\Graph\AdjacencyMatrixGraph.cs" />
+    <Compile Include="Util\Graph\Graph.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

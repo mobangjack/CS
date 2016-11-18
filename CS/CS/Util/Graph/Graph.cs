@@ -20,29 +20,25 @@ using CS.Util.List;
 
 namespace CS.Util.Graph
 {
-	public class AdjacencyMatrixGraph<T>
+	public class Graph<T>
 	{
 		public class Node
 		{
 			private T data;
 			private bool visited;
+			private ArrayList<Node> neighbors;
+			private ArrayList<int> costs;
 
-			public Node ()
-			{
-				this.data = default(T);
-				this.visited = false;
-			}
-
-			public Node (T data)
+			public Node(T data)
 			{
 				this.data = data;
-				this.visited = false;
 			}
 
-			public Node (T data, bool visited)
+			public Node(T data, ArrayList<Node> neighbors, ArrayList<int> costs)
 			{
 				this.data = data;
-				this.visited = visited;
+				this.neighbors = neighbors;
+				this.costs = costs;
 			}
 
 			public T Data
@@ -56,16 +52,33 @@ namespace CS.Util.Graph
 				get { return visited; }
 				set { visited = value; }
 			}
+
+			public ArrayList<Node> Neighbors
+			{
+				get { return neighbors; }
+				set { neighbors = value; }
+			}
+
+			public ArrayList<int> Costs
+			{
+				get { return costs; }
+				set { costs = value; }
+			}
 		}
 
 		private ArrayList<Node> nodes;
-		private int[,] adjMat;
 
-		public AdjacencyMatrixGraph(ArrayList<Node> nodes, int[,] adjMat){
-			if (adjMat.GetLength (0) != adjMat.GetLength (1))
-				throw new System.ArgumentException ("The given adjMat should be a square matrix");
+		public Graph (ArrayList<Node> nodes)
+		{
 			this.nodes = nodes;
-			this.adjMat = adjMat;
+		}
+
+		public int IndexOf(T item)
+		{
+			for (int i = 0; i < nodes.Size (); i++)
+				if(item.Equals(nodes[i]))
+					return i;
+			return -1;
 		}
 
 		private void CheckIndexRange(int index, int max)
@@ -74,17 +87,10 @@ namespace CS.Util.Graph
 				throw new System.IndexOutOfRangeException ();
 		}
 
-		public T this[int index] {
-			get { return nodes [index].Data; }
-			set { nodes [index].Data = value; }
-		}
-
-		public int IndexOf(T item)
+		public T this[int index]
 		{
-			for (int i = 0; i < nodes.Size (); i++)
-				if (item.Equals (nodes [i]))
-					return i;
-			return -1;
+			get { return nodes.Get (index).Data; }
+			set { nodes [index].Data = value; }
 		}
 
 		public int Size()
@@ -98,19 +104,18 @@ namespace CS.Util.Graph
 			set { nodes = value; }
 		}
 
-		public int[,] AdjMat
+		public void AddNode(Node node)
 		{
-			get { return adjMat; }
-			set { adjMat = value; }
+			nodes.Add (node);
 		}
 
 		public override string ToString ()
 		{
 			string s = "";
-			for(int i = 0; i < adjMat.GetLength(0); i++)
-				for(int j = 0; j < adjMat.GetLength(1); j++)
-					if(adjMat[i, j] > 0)
-						s += nodes[i].Data + "->" + nodes[j].Data + ", " + adjMat[i, j] + "\n";
+			for (int i = 0; i < nodes.Size (); i++)
+				if (nodes [i].Neighbors != null)
+					for (int j = 0; j < nodes [i].Neighbors.Size (); j++)
+						s += nodes [i].Data + "-" + nodes [i].Neighbors [j].Data + ", " + nodes [i].Costs[j] + "\n";
 			return s;
 		}
 	}

@@ -180,10 +180,10 @@ namespace CS
 			System.Console.WriteLine ("***********************TestAdjacencyMatrixGraph***********************");
 			System.Console.WriteLine ();
 
-			ArrayList<Vertex<string>> vertexs = new ArrayList<Vertex<string>> (4);
+			ArrayList<AdjacencyMatrixGraph<string>.Node> nodes = new ArrayList<AdjacencyMatrixGraph<string>.Node> (4);
 			for (int i = 0; i < 4; i++) {
-				Vertex<string> vertex = new Vertex<string> ("" + (char)('A' + i));
-				vertexs.Add (vertex);
+				AdjacencyMatrixGraph<string>.Node node = new AdjacencyMatrixGraph<string>.Node ("" + (char)('A' + i));
+				nodes.Add (node);
 			}
 
 			int[,] adjMat = new int[,] {
@@ -193,8 +193,38 @@ namespace CS
 				{1, 0, 0, 1},
 			};
 
-			AdjacencyMatrixGraph<string> adjMatGraph = new AdjacencyMatrixGraph<string> (vertexs, adjMat);
+			AdjacencyMatrixGraph<string> adjMatGraph = new AdjacencyMatrixGraph<string> (nodes, adjMat);
 			System.Console.WriteLine (adjMatGraph);
+
+		}
+
+		public static void TestGraph()
+		{
+			System.Console.WriteLine ();
+			System.Console.WriteLine ("***********************TestGraph***********************");
+			System.Console.WriteLine ();
+
+			ArrayList<Graph<string>.Node> nodes = new ArrayList<Graph<string>.Node> (4);
+			for (int i = 0; i < nodes.Capacity; i++) {
+				Graph<string>.Node node = new Graph<string>.Node ("" + (char)('A' + i));
+				nodes.Add (node);
+			}
+
+			for (int i = 0; i < nodes.Capacity; i++) {
+				ArrayList<Graph<string>.Node> neighbors = new ArrayList<Graph<string>.Node> (nodes.Capacity - 1);
+				ArrayList<int> costs = new ArrayList<int> (nodes.Capacity - 1);
+				for (int j = 0; j < nodes.Capacity - 1; j++) {
+					if (!nodes [j].Equals (nodes [i])) {
+						neighbors.Add (nodes [j]);
+						costs.Add (j);
+					}
+				}
+				nodes [i].Neighbors = neighbors;
+				nodes [i].Costs = costs;
+			}
+
+			Graph<string> graph = new Graph<string> (nodes);
+			System.Console.WriteLine (graph);
 
 		}
 
@@ -207,6 +237,7 @@ namespace CS
 			TestBinaryTree ();
 			TestSparseMatrix();
 			TestAdjacencyMatrixGraph ();
+			TestGraph ();
 		}
 
 	}
