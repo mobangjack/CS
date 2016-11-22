@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
+using CS.Util.Container;
+using CS.Util.Iterator;
+
 namespace CS.Util.Queue
 {
-	public class Queue<T>
+	public class Queue<T> : AbstractContainer<T>
 	{
 		protected T[] arr;
-		protected int r, w, len;
+		protected int r, w;
 
 		public Queue(int initialCapacity)
 		{
-			this.arr = new T[initialCapacity];
-			this.r = this.w = 0;
-			this.len = 0;
+			arr = new T[initialCapacity];
+			r = w = 0;
 		}
 
 		public int Capacity
@@ -41,41 +43,32 @@ namespace CS.Util.Queue
 			}
 		}
 
-		public int Size()
-		{
-			return len;
-		}
-
-		public bool IsEmpty()
-		{
-			return len < 1;
-		}
-
-		public bool NotEmpty()
-		{
-			return len > 0;
-		}
-
-		public bool IsFull()
-		{
-			return len > arr.Length - 1;
-		}
-
 		public void Enqueue(T item)
 		{
-			if (IsFull())
+			if (cnt > arr.Length - 1)
 				Capacity *= 2;
 			arr [w] = item;
 			w = (w + 1) % arr.Length;
-			len++;
+			cnt++;
 		}
 
 		public T Dequeue()
 		{
 			T ret = arr [r];
 			r = (r + 1) % arr.Length;
-			len--;
+			cnt--;
 			return ret;
+		}
+
+		public override void Clear ()
+		{
+			base.Clear ();
+			r = w = 0;
+		}
+
+		public override IIterator<T> Iterator()
+		{
+			return Array.Iterator (Array.ReverseOfRange (arr, 0, cnt));
 		}
 	}
 }

@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
+using CS.Util.Iterator;
+
 namespace CS.Util.List
 {
-	public class ArrayList<T>
+	public class ArrayList<T> : AbstractList<T>
 	{
 		protected T[] arr;
-		protected int len;
 
 		public ArrayList(int initialCapacity)
 		{
 			arr = new T[initialCapacity];
-			len = 0;
 		}
 
-		public int IndexOf(T item)
+		public override int IndexOf(T item)
 		{
-			for(int i = 0; i < len; i++)
-				if(item == null ? arr[i] == null : item.Equals(arr[i]))
+			for(int i = 0; i < cnt; i++)
+				if(Equalty.Equal(item, arr[i]))
 					return i;
 			return -1;
 		}
@@ -40,88 +40,61 @@ namespace CS.Util.List
 			return IndexOf(item) > 0;
 		}
 
-		public int Size()
-		{
-			return len;
-		}
-
-		public bool IsEmpty()
-		{
-			return len < 1;
-		}
-
-		public bool NotEmpty()
-		{
-			return len > 0;
-		}
-
 		public int Capacity
 		{
 			get { return arr.Length; }
-			set {
-				T[] _arr = new T[value];
-				for (int i = 0; i < arr.Length; i++)
-					_arr [i] = arr [i];
-				arr = _arr;
-			}
-		}
-
-		private void IndexRangeCheck(int index, int max)
-		{
-			if (index < 0 || index > max)
-				throw new System.IndexOutOfRangeException();
+			set { arr = CS.Util.Array.Enlarge(arr, value); }
 		}
 
 		public T Get(int index)
 		{
-			IndexRangeCheck (index, len-1);
+			Validator.CheckRange (index, 0, cnt - 1);
 			return arr[index];
 		}
 
 		public T Set(int index, T value)
 		{
-			IndexRangeCheck (index, len-1);
-			if (len > arr.Length - 1)
+			Validator.CheckRange (index, 0, cnt - 1);
+			if (cnt > arr.Length - 1)
 				Capacity *= 2;
 			T replaced = arr[index];
 			arr[index] = value;
-			len++;
 			return replaced;
 		}
 
-		public T this[int index]
+		public override T this[int index]
 		{
 			get { return Get(index); }
 			set { Set (index, value); }
 		}
 
-		public void Add(int index, T item)
+		public override void Add(int index, T item)
 		{
-			IndexRangeCheck (index, len);
-			if (len > arr.Length - 1)
+			Validator.CheckRange (index, 0, cnt);
+			if (cnt > arr.Length - 1)
 				Capacity *= 2;
-			for (int i = len; i > index; i--)
+			for (int i = cnt; i > index; i--)
 				arr [i] = arr [i - 1];
 			arr [index] = item;
-			len++;
+			cnt++;
 		}
 
-		public void Add(T item)
+		public override void Add(T item)
         {
-			Add (len, item);
+			Add (cnt, item);
         }
 
-		public T Remove(int index)
+		public override T Remove(int index)
 		{
-			IndexRangeCheck (index, len-1);
+			Validator.CheckRange (index, 0, cnt - 1);
 			T removed = Get(index);
-			for(int i = index; i < len - 1; i++)
+			for(int i = index; i < cnt - 1; i++)
 				arr[i] = arr[i+1];
-			len--;
+			cnt--;
 			return removed;
 		}
 
-		public bool Remove(T item)
+		public override bool Remove(T item)
 		{
 			int index = IndexOf(item);
 			if(index < 0) return false;
@@ -129,18 +102,14 @@ namespace CS.Util.List
 			return true;
 		}
 
-		public void Clear()
+		public override T[] ToArray()
 		{
-			len = 0;
+			return Array.CopyOfRange(arr, 0, cnt);
 		}
 
-		public T[] ToArray()
+		public override IIterator<T> Iterator()
 		{
-			T[] _arr = new T[len];
-			for(int i = 0; i < len; i++)
-				_arr[i] = arr[i];
-			return _arr;
+			return Array.Iterator (ToArray());
 		}
-			
 	}
 }

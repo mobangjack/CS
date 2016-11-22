@@ -42,10 +42,28 @@
     <Compile Include="Util\Tree\BinaryTree.cs" />
     <Compile Include="Util\Matrix\SparseMatrix.cs" />
     <Compile Include="Util\Graph\AdjacencyMatrixGraph.cs" />
-    <Compile Include="Util\Graph\Graph.cs" />
+    <Compile Include="Util\Tree\BinarySearchTree.cs" />
+    <Compile Include="Util\List\IList.cs" />
+    <Compile Include="Util\Iterator\IIterator.cs" />
+    <Compile Include="Util\Iterator\ArrayIterator.cs" />
+    <Compile Include="Util\Iterator\LinkedNodeIterator.cs" />
+    <Compile Include="Util\Equalty.cs" />
+    <Compile Include="Util\Validator.cs" />
+    <Compile Include="Util\DataBox.cs" />
+    <Compile Include="Util\Array.cs" />
+    <Compile Include="Util\Container\IContainer.cs" />
+    <Compile Include="Util\Container\AbstractContainer.cs" />
+    <Compile Include="Util\Matrix\Matrix.cs" />
+    <Compile Include="Util\Graph\AdjacencyMatrixGraphNode.cs" />
+    <Compile Include="Util\Graph\AdjacencyLinkedGraphNode.cs" />
+    <Compile Include="Util\Graph\AdjacencyLinkedGraph.cs" />
+    <Compile Include="Util\List\LinkedNode.cs" />
+    <Compile Include="Util\List\AbstractList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Util\Graph\" />
+    <Folder Include="Util\Iterator\" />
+    <Folder Include="Util\Container\" />
   </ItemGroup>
 </Project>

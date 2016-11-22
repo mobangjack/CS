@@ -18,12 +18,11 @@ using CS.Util.Queue;
 
 namespace CS.Util.Tree
 {
-	public class BinaryTree<T>
+	public class BinaryTree<T> : DataBox<T>
 	{
-		private T data;
 		private BinaryTree<T> parent, left, right;
 
-		private BinaryTree()
+		public BinaryTree()
 		{
 			data = default(T);
 			parent = left = right = null;
@@ -33,12 +32,6 @@ namespace CS.Util.Tree
 		{
 			this.data = data;
 			parent = left = right = null;
-		}
-
-		public T Data
-		{
-			get { return data; }
-			set { data = value; }
 		}
 
 		public BinaryTree<T> Parent

@@ -16,12 +16,14 @@
 //
 //
 
+using CS.Util;
 using CS.Util.List;
 using CS.Util.Stack;
 using CS.Util.Queue;
 using CS.Util.Tree;
 using CS.Util.Matrix;
 using CS.Util.Graph;
+using CS.Util.Iterator;
 
 namespace CS
 {
@@ -33,13 +35,14 @@ namespace CS
 			System.Console.WriteLine ("***********************TestArrayList***********************");
 			System.Console.WriteLine ();
 
-			ArrayList<string> list = new ArrayList<string> (10);
+			IList<string> list = new ArrayList<string> (10);
 			list.Add ("1.Linear: One to One");
 			list.Add ("2.Tree: One to Many");
 			list.Add ("3.Map: Many to Many");
-			for (int i = 0; i < list.Size (); i++) {
-				System.Console.WriteLine (list.Get (i));
-			}
+
+			IIterator<string> it = list.Iterator ();
+			while(it.HasNext())
+				System.Console.WriteLine (it.Next);
 		}
 
 		public static void TestLinkedList()
@@ -48,13 +51,14 @@ namespace CS
 			System.Console.WriteLine ("***********************TestLinkedList***********************");
 			System.Console.WriteLine ();
 
-			LinkedList<string> list = new LinkedList<string> ();
+			IList<string> list = new LinkedList<string> ();
 			list.Add ("1.Linear: One to One");
 			list.Add ("2.Tree: One to Many");
 			list.Add ("3.Map: Many to Many");
-			for (int i = 0; i < list.Size (); i++) {
-				System.Console.WriteLine (list.Get (i));
-			}
+
+			IIterator<string> it = list.Iterator ();
+			while(it.HasNext())
+				System.Console.WriteLine (it.Next);
 		}
 
 		public static void TestStack()
@@ -67,6 +71,7 @@ namespace CS
 			stack.Push ("1.Linear: One to One");
 			stack.Push ("2.Tree: One to Many");
 			stack.Push ("3.Map: Many to Many");
+
 			while(stack.NotEmpty()) {
 				System.Console.WriteLine (stack.Pop());
 			}
@@ -82,6 +87,7 @@ namespace CS
 			queue.Enqueue ("1.Linear: One to One");
 			queue.Enqueue ("2.Tree: One to Many");
 			queue.Enqueue ("3.Map: Many to Many");
+
 			while(queue.NotEmpty()) {
 				System.Console.WriteLine (queue.Dequeue());
 			}
@@ -180,9 +186,9 @@ namespace CS
 			System.Console.WriteLine ("***********************TestAdjacencyMatrixGraph***********************");
 			System.Console.WriteLine ();
 
-			ArrayList<AdjacencyMatrixGraph<string>.Node> nodes = new ArrayList<AdjacencyMatrixGraph<string>.Node> (4);
-			for (int i = 0; i < 4; i++) {
-				AdjacencyMatrixGraph<string>.Node node = new AdjacencyMatrixGraph<string>.Node ("" + (char)('A' + i));
+			ArrayList<AdjacencyMatrixGraphNode<string>> nodes = new ArrayList<AdjacencyMatrixGraphNode<string>> (4);
+			for (int i = 0; i < nodes.Capacity; i++) {
+				AdjacencyMatrixGraphNode<string> node = new AdjacencyMatrixGraphNode<string> ("" + (char)('A' + i));
 				nodes.Add (node);
 			}
 
@@ -198,20 +204,20 @@ namespace CS
 
 		}
 
-		public static void TestGraph()
+		public static void TestAdjacencyLinkedGraph()
 		{
 			System.Console.WriteLine ();
-			System.Console.WriteLine ("***********************TestGraph***********************");
+			System.Console.WriteLine ("***********************TestAdjacencyLinkedGraph***********************");
 			System.Console.WriteLine ();
 
-			ArrayList<Graph<string>.Node> nodes = new ArrayList<Graph<string>.Node> (4);
+			ArrayList<AdjacencyLinkedGraphNode<string>> nodes = new ArrayList<AdjacencyLinkedGraphNode<string>> (4);
 			for (int i = 0; i < nodes.Capacity; i++) {
-				Graph<string>.Node node = new Graph<string>.Node ("" + (char)('A' + i));
+				AdjacencyLinkedGraphNode<string> node = new AdjacencyLinkedGraphNode<string> ("" + (char)('A' + i));
 				nodes.Add (node);
 			}
 
 			for (int i = 0; i < nodes.Capacity; i++) {
-				ArrayList<Graph<string>.Node> neighbors = new ArrayList<Graph<string>.Node> (nodes.Capacity - 1);
+				ArrayList<AdjacencyLinkedGraphNode<string>> neighbors = new ArrayList<AdjacencyLinkedGraphNode<string>> (nodes.Capacity - 1);
 				ArrayList<int> costs = new ArrayList<int> (nodes.Capacity - 1);
 				for (int j = 0; j < nodes.Capacity - 1; j++) {
 					if (!nodes [j].Equals (nodes [i])) {
@@ -223,9 +229,81 @@ namespace CS
 				nodes [i].Costs = costs;
 			}
 
-			Graph<string> graph = new Graph<string> (nodes);
+			AdjacencyLinkedGraph<string> graph = new AdjacencyLinkedGraph<string> (nodes);
 			System.Console.WriteLine (graph);
 
+		}
+
+		public static void PrintArray<T>(T[] arr)
+		{
+			for (int i = 0; i < arr.Length; i++) {
+				System.Console.Write (string.Format("{0} ", arr [i]));
+			}
+		}
+
+		public static void TestSort()
+		{
+			System.Console.WriteLine ();
+			System.Console.WriteLine ("***********************TestSort***********************");
+			System.Console.WriteLine ();
+
+			int size = 30;
+			int[] arr = new int[size];
+			System.Random random = new System.Random ();
+			for (int i = 0; i < size; i++) {
+				arr [i] = random.Next (0, size);
+			}
+			System.Console.WriteLine ("Original:");
+			PrintArray (arr);
+			System.Console.WriteLine ();
+
+			Array.BubbleSort (arr);
+
+			System.Console.WriteLine ("BubbleSort:");
+			PrintArray (arr);
+			System.Console.WriteLine ();
+
+			Array.InsertSort (arr);
+
+			System.Console.WriteLine ("InsertSort:");
+			PrintArray (arr);
+			System.Console.WriteLine ();
+
+			/*
+			Array.HeapSort (arr);
+
+			System.Console.WriteLine ("HeapSort:");
+			System.Console.WriteLine (arr);
+			System.Console.WriteLine ();
+			*/
+		}
+
+		public static void TestSearch()
+		{
+			System.Console.WriteLine ();
+			System.Console.WriteLine ("***********************TestSearch***********************");
+			System.Console.WriteLine ();
+
+			int size = 100;
+			int[] arr = new int[size];
+			for (int i = 0; i < size; i++) {
+				arr [i] = new System.Random ().Next (size);
+			}
+			System.Console.WriteLine ("Original:");
+			System.Console.WriteLine (arr);
+			System.Console.WriteLine ();
+
+			Array.BubbleSort (arr);
+
+			System.Console.WriteLine ("LinearSearch:");
+			System.Console.WriteLine (arr);
+			System.Console.WriteLine ();
+
+			Array.InsertSort (arr);
+
+			System.Console.WriteLine ("BinarySearch:");
+			System.Console.WriteLine (arr);
+			System.Console.WriteLine ();
 		}
 
 		public static void Main (string[] args)
@@ -237,7 +315,10 @@ namespace CS
 			TestBinaryTree ();
 			TestSparseMatrix();
 			TestAdjacencyMatrixGraph ();
-			TestGraph ();
+			TestAdjacencyLinkedGraph ();
+
+			TestSort ();
+			//TestSearch ();
 		}
 
 	}

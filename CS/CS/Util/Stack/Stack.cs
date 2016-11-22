@@ -14,60 +14,41 @@
  * limitations under the License.
  */
 
+using CS.Util.Container;
+using CS.Util.Iterator;
+
 namespace CS.Util.Stack
 {
-	public class Stack<T>
+	public class Stack<T> : AbstractContainer<T>
 	{
 		protected T[] arr;
-		protected int len;
 
-		public Stack(int initialCapacity)
+		public Stack(int initialCapacity) : base()
 		{
-			this.arr = new T[initialCapacity];
-			this.len = 0;
+			arr = new T[initialCapacity];
 		}
 
 		public int Capacity
 		{
 			get { return arr.Length; }
-			set {
-				T[] _arr = new T[value];
-				for (int i = 0; i < arr.Length; i++)
-					_arr [i] = arr [i];
-				arr = _arr;
-			}
-		}
-
-		public int Size()
-		{
-			return len;
-		}
-
-		public bool IsEmpty()
-		{
-			return len < 1;
-		}
-
-		public bool NotEmpty()
-		{
-			return len > 0;
-		}
-
-		public bool IsFull()
-		{
-			return len > arr.Length - 1;
+			set { arr = Array.Enlarge (arr, value); }
 		}
 
 		public void Push(T item)
 		{
-			if (IsFull())
+			if (cnt > arr.Length - 1)
 				Capacity *= 2;
-			arr [len++] = item;
+			arr [cnt++] = item;
 		}
 
 		public T Pop()
 		{
-			return arr [--len];
+			return arr [--cnt];
+		}
+
+		public override IIterator<T> Iterator()
+		{
+			return Array.Iterator (Array.ReverseOfRange (arr, 0, cnt));
 		}
 	}
 }

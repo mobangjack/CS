@@ -14,59 +14,23 @@
  * limitations under the License.
  */
 
+using CS.Util.Iterator;
+
 namespace CS.Util.List
 {
-	public class LinkedList<T>
+	public class LinkedList<T> : AbstractList<T>
 	{
-		public class Node
-		{
-			private T data;
-			private Node left, right;
-
-			public Node()
-			{
-				data = default(T);
-				left = right = default(Node);
-			}
-
-			public Node(T data)
-			{
-				this.data = data;
-				left = right = null;
-			}
-
-			public T Data
-			{
-				get { return data; }
-				set { data = value; }
-			}
-
-			public Node Left
-			{
-				get { return left; }
-				set { left = value; }
-			}
-
-			public Node Right
-			{
-				get { return right; }
-				set { right = value; }
-			}
-		}
-
-		private Node first, last;
-		private int len;
+		private LinkedNode<T> first, last;
 
 		public LinkedList()
 		{
 			first = last = null;
-			len = 0;
 		}
 
-		public int IndexOf(T item)
+		public override int IndexOf(T item)
 		{
-			Node node = first;
-			for (int i = 0; i < len && node != null; i++, node = node.Right)
+			LinkedNode<T> node = first;
+			for (int i = 0; i < cnt && node != null; i++, node = node.Right)
 				if (item == null ? node.Data == null : item.Equals(node.Data))
 					return i;
 			return -1;
@@ -77,97 +41,76 @@ namespace CS.Util.List
 			return IndexOf(item) > 0;
 		}
 
-		public int Size()
+		private LinkedNode<T> NodeAt(int index)
 		{
-			return len;
-		}
-
-		public bool IsEmpty()
-		{
-			return len < 1;
-		}
-
-		public bool NotEmpty()
-		{
-			return len > 0;
-		}
-
-		private Node NodeAt(int index)
-		{
-            Node node = first;
-			for (int i = 0; i < len && node != null; i++, node = node.Right)
+			LinkedNode<T> node = first;
+			for (int i = 0; i < cnt && node != null; i++, node = node.Right)
 				if (i == index)
 					return node;
 			return null;
 		}
 
-		private Node NodeOf(T item)
+		private LinkedNode<T> NodeOf(T item)
 		{
-			Node node = first;
-			for (int i = 0; i < len && node != null; i++, node = node.Right)
-				if(item == null ? node.Data == null : item.Equals(node.Data))
+			LinkedNode<T> node = first;
+			for (int i = 0; i < cnt && node != null; i++, node = node.Right)
+				if(Equalty.Equal(item, node.Data))
 					return node;
 			return null;
 		}
 
-		private void IndexRangeCheck(int index, int max)
-		{
-			if (index < 0 || index > max)
-				throw new System.IndexOutOfRangeException();
-		}
-
 		public T Get(int index)
 		{
-			IndexRangeCheck (index, len - 1);
-			Node node = NodeAt (index);
+			Validator.CheckRange (index, 0, cnt - 1);
+			LinkedNode<T> node = NodeAt (index);
 			return node == null ? default(T) : node.Data;
 		}
 
 		public T Set(int index, T value)
 		{
-			IndexRangeCheck (index, len - 1);
-			Node node = NodeAt (index);
+			Validator.CheckRange (index, 0, cnt - 1);
+			LinkedNode<T> node = NodeAt (index);
 			T replaced = node.Data;
 			node.Data = value;
 			return replaced;
 		}
 
-		public T this[int index]
+		public override T this[int index]
 		{
 			get { return Get(index); }
 			set { Set (index, value); }
 		}
 
-		public void Add(int index, T item)
+		public override void Add(int index, T item)
 		{
-			IndexRangeCheck (index, len);
-			Node added = new Node (item);
+			Validator.CheckRange (index, 0, cnt);
+			LinkedNode<T> added = new LinkedNode<T> (item);
 			if (first == null)
 				first = last = added;
 			if (index == 0) {
 				first.Left = added;
 				added.Right = first;
 				first = added;
-			} else if (index == len) {
+			} else if (index == cnt) {
 				last.Right = added;
 				added.Left = last;
 				last = added;
 			} else {
-				Node node = NodeAt (index);
+				LinkedNode<T> node = NodeAt (index);
 				node.Left.Right = added;
 				added.Left = node.Left;
 				added.Right = node;
 				node.Left = added;
 			}
-			len++;
+			cnt++;
 		}
 
-		public void Add(T item)
+		public override void Add(T item)
         {
-			Add (len, item);
+			Add (cnt, item);
         }
 
-		private void RemoveNode(Node node)
+		private void RemoveNode(LinkedNode<T> node)
 		{
 			if(node.Equals(first)) {
 				first = first.Right;
@@ -179,35 +122,46 @@ namespace CS.Util.List
 				node.Left.Right = node.Right;
 				node.Right.Left = node.Left;
 			}
-			len--;
+			cnt--;
 		}
 
-		public bool Remove(T item)
+		public override bool Remove(T item)
 		{
-			Node node = NodeOf (item);
+			LinkedNode<T> node = NodeOf (item);
 			if (node == null)
 				return false;
 			RemoveNode (node);
 			return true;
 		}
 
-		public T Remove(int index)
+		public override T Remove(int index)
 		{
-			IndexRangeCheck (index, len - 1);
-			Node node = NodeAt (index);
+			Validator.CheckRange (index, 0, cnt - 1);
+			LinkedNode<T> node = NodeAt (index);
 			RemoveNode (node);
 			return node.Data;
 		}
 
-		public T[] ToArray()
+		public override void Clear()
+		{
+			first = last = null;
+			cnt = 0;
+		}
+
+		public override T[] ToArray()
 		{
 			if (first == null)
 				return null;
-			Node node = first;
-			T[] _arr = new T[len];
-			for (int i = 0; i < len; node = node.Right, i++)
+			LinkedNode<T> node = first;
+			T[] _arr = new T[cnt];
+			for (int i = 0; i < cnt; node = node.Right, i++)
 				_arr [i] = node.Data;
 			return _arr;
+		}
+			
+		public override IIterator<T> Iterator()
+		{
+			return new LinkedNodeIterator<T> (first);
 		}
 	}
 }

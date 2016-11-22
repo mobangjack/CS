@@ -20,37 +20,28 @@ using CS.Util.List;
 
 namespace CS.Util.Graph
 {
-	public class AdjacencyMatrixGraph<T>
+	public class AdjacencyLinkedGraph<T>
 	{
-		private IList<AdjacencyMatrixGraphNode<T>> nodes;
-		private int[,] adjMat;
+		private IList<AdjacencyLinkedGraphNode<T>> nodes;
 
-		public AdjacencyMatrixGraph(IList<AdjacencyMatrixGraphNode<T>> nodes, int[,] adjMat){
-			if (adjMat.GetLength (0) != adjMat.GetLength (1))
-				throw new System.ArgumentException ("The given adjMat should be a square matrix");
+		public AdjacencyLinkedGraph (IList<AdjacencyLinkedGraphNode<T>> nodes)
+		{
 			this.nodes = nodes;
-			this.adjMat = adjMat;
 		}
 
-		public IList<AdjacencyMatrixGraphNode<T>> Nodes
+		public IList<AdjacencyLinkedGraphNode<T>> Nodes
 		{
 			get { return nodes; }
 			set { nodes = value; }
 		}
 
-		public int[,] AdjMat
-		{
-			get { return adjMat; }
-			set { adjMat = value; }
-		}
-
 		public override string ToString ()
 		{
 			string s = "";
-			for (int i = 0; i < adjMat.GetLength (0); i++)
-				for (int j = 0; j < adjMat.GetLength (1); j++)
-					if (adjMat [i, j] > 0)
-						s += string.Format ("{0}->{1}, {2}\n", nodes [i].Data, nodes [j].Data, adjMat [i, j]);
+			for (int i = 0; i < nodes.Size (); i++)
+				if (nodes [i].Neighbors != null)
+					for (int j = 0; j < nodes [i].Neighbors.Size (); j++)
+						s += string.Format ("{0}->{1}, {2}\n", nodes [i].Data, nodes [i].Neighbors [j].Data, nodes [i].Costs [j]);
 			return s;
 		}
 	}
