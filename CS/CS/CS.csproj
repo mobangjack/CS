@@ -59,11 +59,16 @@
     <Compile Include="Util\Graph\AdjacencyLinkedGraph.cs" />
     <Compile Include="Util\List\LinkedNode.cs" />
     <Compile Include="Util\List\AbstractList.cs" />
+    <Compile Include="Util\Map\HashMap.cs" />
+    <Compile Include="Util\Map\IMap.cs" />
+    <Compile Include="Util\Map\Entry.cs" />
+    <Compile Include="Util\Tree\RedBlackTree.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Util\Graph\" />
     <Folder Include="Util\Iterator\" />
     <Folder Include="Util\Container\" />
+    <Folder Include="Util\Map\" />
   </ItemGroup>
 </Project>

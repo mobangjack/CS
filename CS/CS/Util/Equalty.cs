@@ -20,7 +20,7 @@ namespace CS.Util
 {
 	public class Equalty
 	{
-		public static bool Equal(object a, object b)
+		public static bool Check(object a, object b)
 		{
 			return a == null ? b == null : a.Equals (b);
 		}

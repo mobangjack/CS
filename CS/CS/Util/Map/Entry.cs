@@ -16,16 +16,45 @@
 //
 //
 
-namespace CS.Util
+namespace CS.Util.Map
 {
-	public class Validator
+	public class Entry<K,V>
 	{
-		public static void CheckRange(int val, int min, int max)
+		private K key;
+		private V val;
+		private Entry<K,V> next;
+
+		public Entry() {
+		}
+
+		public Entry(K k, V v)
 		{
-			if (val < min || val > max)
-				throw new System.ArgumentOutOfRangeException (string.Format("The given value {0} is out of range [{1}, {2}]", val, min, max));
+			this.key = k;
+			this.val = v;
+		}
+
+		public Entry(K k, V v, Entry<K,V> n) : this(k, v)
+		{
+			this.next = n;
 		}
 			
+		public K Key
+		{
+			get { return key; }
+			set { key = value; }
+		}
+
+		public V Val
+		{
+			get { return val; }
+			set { val = value; }
+		}
+
+		public Entry<K,V> Next
+		{
+			get { return next; }
+			set { next = value; }
+		}
 	}
 }
 

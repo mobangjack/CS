@@ -16,16 +16,13 @@
 //
 //
 
-namespace CS.Util
+namespace CS.Util.Tree
 {
-	public class Validator
+	public class RedBlackTree
 	{
-		public static void CheckRange(int val, int min, int max)
+		public RedBlackTree ()
 		{
-			if (val < min || val > max)
-				throw new System.ArgumentOutOfRangeException (string.Format("The given value {0} is out of range [{1}, {2}]", val, min, max));
 		}
-			
 	}
 }
 

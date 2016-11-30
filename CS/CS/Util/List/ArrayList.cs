@@ -30,7 +30,7 @@ namespace CS.Util.List
 		public override int IndexOf(T item)
 		{
 			for(int i = 0; i < cnt; i++)
-				if(Equalty.Equal(item, arr[i]))
+				if(Equalty.Check(item, arr[i]))
 					return i;
 			return -1;
 		}

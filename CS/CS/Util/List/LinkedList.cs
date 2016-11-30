@@ -54,7 +54,7 @@ namespace CS.Util.List
 		{
 			LinkedNode<T> node = first;
 			for (int i = 0; i < cnt && node != null; i++, node = node.Right)
-				if(Equalty.Equal(item, node.Data))
+				if(Equalty.Check(item, node.Data))
 					return node;
 			return null;
 		}

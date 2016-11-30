@@ -16,16 +16,14 @@
 //
 //
 
-namespace CS.Util
+using CS.Util.Container;
+
+namespace CS.Util.Map
 {
-	public class Validator
+	public interface IMap<K,V> : IContainer<Entry<K,V>>
 	{
-		public static void CheckRange(int val, int min, int max)
-		{
-			if (val < min || val > max)
-				throw new System.ArgumentOutOfRangeException (string.Format("The given value {0} is out of range [{1}, {2}]", val, min, max));
-		}
-			
+		V Put (K k, V v);
+		V Get (K k);
 	}
 }
 

@@ -116,7 +116,7 @@ namespace CS.Util
 			CS.Util.Validator.CheckRange (to, 0, arr.Length - 1);
 			CS.Util.Validator.CheckRange (from, 0, to);
 			for (int i = from; i < to; i++)
-				if (CS.Util.Equalty.Equal (obj, arr [i]))
+				if (CS.Util.Equalty.Check (obj, arr [i]))
 					return i;
 			return -1;
 		}
@@ -132,10 +132,10 @@ namespace CS.Util
 			//int left = 0;
 			//int right = 0;
 			for (int i = 0; i < mid; i++)
-				if (CS.Util.Equalty.Equal (obj, arr [i]))
+				if (CS.Util.Equalty.Check (obj, arr [i]))
 					return i;
 			for(int i = mid; i < arr.Length; i++)
-				if (CS.Util.Equalty.Equal (obj, arr [i]))
+				if (CS.Util.Equalty.Check (obj, arr [i]))
 					return i;
 			return -1;
 		}

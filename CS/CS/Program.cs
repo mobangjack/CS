@@ -164,6 +164,22 @@ namespace CS
 			System.Console.WriteLine ();
 		}
 
+		public static void TestMatrix()
+		{
+			System.Console.WriteLine ();
+			System.Console.WriteLine ("***********************TestMatrix***********************");
+			System.Console.WriteLine ();
+
+			Matrix<int> matrix = new Matrix<int> ();
+			for (int i = 0; i < 5; i++)
+				matrix [i, i] = i + 1;
+
+			System.Console.WriteLine ("Matrix");
+			System.Console.WriteLine (matrix.ToString());
+			System.Console.WriteLine ();
+
+		}
+
 		public static void TestSparseMatrix()
 		{
 			System.Console.WriteLine ();
@@ -172,7 +188,7 @@ namespace CS
 
 			SparseMatrix matrix = new SparseMatrix ();
 			for (int i = 0; i < 5; i++)
-				matrix.Set (i, i, i + 1);
+				matrix [i, i] = i + 1;
 			
 			System.Console.WriteLine ("SparseMatrix");
 			System.Console.WriteLine (matrix.ToString());
@@ -313,6 +329,7 @@ namespace CS
 			TestStack ();
 			TestQueue ();
 			TestBinaryTree ();
+			TestMatrix ();
 			TestSparseMatrix();
 			TestAdjacencyMatrixGraph ();
 			TestAdjacencyLinkedGraph ();
